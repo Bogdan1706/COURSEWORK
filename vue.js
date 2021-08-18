@@ -6,9 +6,7 @@ const App = {
   data() {
     return {
       headerTitle: 'План по изучению Vue.js',
-      btnTitleGo: 'Вперед',
-      btnTitleBack: 'Назад',
-      btnTitleEnd: 'Завершить',
+      isActive: true,
       activeIndex: 0, // то, что позволяет определить текущий активный шаг
       
       steps: [
@@ -23,53 +21,49 @@ const App = {
   methods: {
     prev() {
       // когда нажимаем кнопку назад
-      this.activeIndex--
-      
+      if (this.activeIndex !==0) {
+        this.activeIndex--
+      } 
     },
+
     reset() {
       // начать заново
       this.activeIndex = 0
-     
+      this.isActive = true
     },
 
     nextOfFinish() {
       // кнопка вперед или закончить
-      this.activeIndex++ 
+      if (this.activeIndex !== this.steps.length - 1) {
+        this.activeIndex++
+      } else {
+        this.isActive = false
+      }
     },
 
     setActive(idx) {
       // когда нажимаем на определенный шаг
-      return this.activeIndex === idx
-    },
-
-    setDone(idx) {
-      // когда нажимаем на определенный шаг
-      return this.activeIndex > idx
-    },
-
-    setclickActive(index) {
-      return this.activeIndex = index  
+      return this.activeIndex = idx
     }
-      
   },
+
   computed: {
     // тут стоит определить несколько свойств:
     // 1. текущий выбранный шаг
-   
-    // 2. выключена ли кнопка назад
-    lostShag() {
-      return this.activeIndex <= 0
-    },
-    // 3. находимся ли мы на последнем шаге
-    lastStep() {
-      return this.activeIndex <=3
-    },
-
-    stepContent () {
+    activeStep() {
       return this.steps[this.activeIndex].text
-    }
+    },
 
-  }, 
+    // 2. выключена ли кнопка назад
+    prevDisabled() {
+      return this.activeIndex === 0
+    },
+
+    // 3. находимся ли мы на последнем шаге
+    isLastStep() {
+      return this.activeIndex === this.steps.length - 1
+    }  
+  } 
 }
 
 Vue.createApp(App).mount('#app')

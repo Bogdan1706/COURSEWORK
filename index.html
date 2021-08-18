@@ -10,25 +10,31 @@
 
   <div class="container" id="app" v-cloak>
     <div class="card">
-      <h1> {{headerTitle}} </h1>
+      <h1> {{headerTitle}}</h1>
 
       <div class="steps">
         <div class="steps-content">
-          {{stepContent}}
+          {{activeStep}}
         </div>
         <ul class="steps-list">
-          <li class="steps-item "
-           :class="{active: setActive(index),done:setDone(index) }" 
-           @click="setclickActive(index)"
-           v-for="(step, index) in steps"  ><span>{{index+1}}</span> {{step.title}}</li>
-          <!-- <li class="steps-item done"  ><span>2</span> Шаг 2</li>
-          <li class="steps-item active"><span>3</span> Шаг 3</li>
-          <li class="steps-item"><span>4</span> Шаг 4</li> -->
+          <li 
+            class="steps-item "
+           :class="{active: index === activeIndex ,
+            done:index < activeIndex }" 
+          
+           v-for="(step, index) in steps">
+           <span  @click="setActive(index)" >{{index+1}}</span>
+            {{step.title}}
+          </li> 
         </ul>
-        <div>
-          <button class="btn" :disabled="lostShag" @click="prev">{{btnTitleBack}}</button>
-          <button class="btn primary"  @click="nextOfFinish" v-if="lastStep">{{btnTitleGo}}</button>
-          <button class="btn primary" @click="reset" v-else="lastStep">{{btnTitleEnd}}</button>
+        <div v-if="isActive">
+          <button class="btn" :disabled="prevDisabled" @click="prev">Назад</button>
+          <button class="btn primary"  @click="nextOfFinish">
+            {{ isLastStep ? 'Закончить' : 'Вперед'}} 
+          </button>
+        </div>
+        <div v-else>
+          <button class="btn" @click="reset">Начать заново</button>
         </div>
       </div>
     </div>
